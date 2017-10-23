@@ -1,0 +1,44 @@
+.gameArea {
+    background: linear-gradient(360deg, #3a5875, #2a2a2a);
+    background-size: 200%;
+    padding: 1em;
+    border-radius: 15pt;
+    box-shadow: 1rem 1rem 1rem #000;
+}
+    .gameArea h1, .gameArea p {
+        color: #fff;
+    }
+
+.shake {
+    animation: shake .87s;
+}
+
+@keyframes shake {
+    from, to {
+        transform: translate3d(0, 0, 0);
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+        transform: translate3d(-10px, 0, 0);
+    }
+
+    20%, 40%, 60%, 80% {
+        transform: translate3d(10px, 0, 0);
+    }
+}
+
+.displayLow {
+    background: #ff4b54;
+}
+
+.displayCorrect {
+    background: #3acd24;
+}
+
+.displayHigh {
+    background: #71c7ec;
+}
+
+.displayNull {
+    background: #fff;
+}
