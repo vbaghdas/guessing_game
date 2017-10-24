@@ -144,14 +144,14 @@ class Game extends Component {
                 <form onSubmit={ this.handleSubmit }>
                     <div className="row justify-content-center">
                         <div className="col-4">
-                            <input value={ guessInput } onChange={ this.handleUserInput } onClick={ this.handleDisplay }  className={"form-control form-control-lg user-input " +
+                            <input value={ guessInput } onChange={ this.handleUserInput } onClick={ this.handleDisplay }  className={"form-control form-control-lg user-input mt-3 " +
                             (displayLow ? 'displayLow' : displayHigh ? 'displayHigh' : displayCorrect ? 'displayCorrect' : '')}
                             />
                         </div>
                     </div>
                     <div className="row justify-content-center">
-                        <button onClick={ this.resetGame } className="btn btn-lg btn-outline-danger col-2 m-3" type="button">Reset Game</button>
-                        <button onClick={ this.onShake } className="btn btn-lg btn-outline-success col-2 m-3">Guess</button>
+                        <button onClick={ this.onShake } className="btn btn-lg btn-outline-success col-xs-6 m-3">Guess Number</button>
+                        <button onClick={ this.resetGame } className="btn btn-lg btn-outline-danger col-xs-6 m-3" type="button">Reset Game</button>
                     </div>
                 </form>
                 <h1 className={"text-center my-3 " + ( shake ? 'shake' : '') }>{ guess } { message }</h1>
