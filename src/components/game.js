@@ -141,6 +141,7 @@ class Game extends Component {
         return (
             <div className="gameArea">
                 <h1 className="text-center my-3">Guessing Game</h1>
+                <h3 className="text-center my-3">Choose a number between 1-5000</h3>
                 <form onSubmit={ this.handleSubmit }>
                     <div className="row justify-content-center">
                         <div className="col-4">
