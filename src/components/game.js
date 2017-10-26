@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import History from './history';
 
 class Game extends Component {
     constructor(props){
@@ -13,6 +14,7 @@ class Game extends Component {
             min: 1,
             max: 10000,
             lowestScore: [],
+            history: [],
             displayLow: false,
             displayCorrect: false,
             displayHigh: false,
@@ -21,10 +23,10 @@ class Game extends Component {
         this.generateRandomNum = this.generateRandomNum.bind(this);
         this.handleUserInput = this.handleUserInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.displayMessage = this.displayMessage.bind(this);
-        this.resetGame = this.resetGame.bind(this);
-        this.onShake = this.onShake.bind(this);
         this.handleDisplay = this.handleDisplay.bind(this);
+        this.handleShake = this.handleShake.bind(this);
+        this.handleGuess = this.handleGuess.bind(this);
+        this.resetGame = this.resetGame.bind(this);
     }
 
     componentWillMount() {
@@ -71,7 +73,7 @@ class Game extends Component {
             guessInput: '',
             guessCount: guessCount + 1,
         });
-        this.displayMessage();
+        this.handleGuess();
         console.log('This is the random number', this.state.randomNum);
     }
 
@@ -84,37 +86,39 @@ class Game extends Component {
         })
     }
 
-    displayMessage() {
-        const { lowestScore, guessCount, guessInput, randomNum } = this.state;
+    handleShake() {
+        this.setState ({ shake: true }, () => {
+            setTimeout (() => this.setState ({ shake: false }), 1000);
+        });
+    }
+
+    handleGuess() {
+        const { lowestScore, guess, guessCount, guessInput, randomNum, history } = this.state;
         const userGuess = parseInt(guessInput);
-        if(userGuess === randomNum){
-            const newStateArray = lowestScore;
+        const newStateArray = lowestScore;
+        const updates = {};
+        
+        if(userGuess !== randomNum){
             newStateArray.push(guessCount);
-            this.setState ({
-                message: ' | You got it!',
-                randomNum: this.generateRandomNum(),
-                score: guessCount,
-                guessCount: 0,
-                lowestScore: newStateArray,
-                displayCorrect: true
-            });
-        } else if (userGuess > randomNum){
-            this.setState ({
-                message: ' is Too High!',
-                displayHigh: true
-            });
-        } else if (userGuess < randomNum){
-            this.setState ({
-                message: ' is Too Low!',
-                displayLow: true
-            });
-        } else if (isNaN(userGuess)){
-            this.setState ({
-                message: 'Please enter a number!',
-                guess: '',
-                displayNull: false
-            });
+            updates.message = (userGuess > randomNum) ? 'Too High' : 'Too Low';
+            updates.displayHigh = (userGuess > randomNum) ? true : false;
+            updates.displayLow = (userGuess < randomNum) ? true : false;
         }
+        if(userGuess === randomNum){
+            updates.message = 'You Guessed It!';
+            updates.randomNum = this.generateRandomNum();
+            updates.score = guessCount;
+            updates.guessCount = 0;
+            updates.lowestScore = newStateArray;
+            updates.displayCorrect = true;
+        }
+        if(isNaN(userGuess)){
+            updates.message = 'Please enter a number';
+            updates.guess = '';
+            updates.displayNull = false;
+        }
+        updates.history = [{guess: userGuess, result: updates.message}, ...history];
+        this.setState(updates);
     }
 
     resetGame() {
@@ -126,22 +130,17 @@ class Game extends Component {
             min: 1,
             max: 10000,
             message: '',
+            history: [],
             displayNull: this.handleDisplay()
         });
     }
 
-    onShake() {
-        this.setState ({ shake: true }, () => {
-            setTimeout (() => this.setState ({ shake: false }), 1000);
-        });
-    }
-
     render(){
-        const { displayHigh, displayLow, displayCorrect, guessInput, guess, guessCount, lowestScore, shake, message } = this.state;
+        const { displayHigh, displayLow, displayCorrect, guessInput, guess, guessCount, lowestScore, shake, message, history } = this.state;
         return (
             <div className="gameArea">
                 <h1 className="text-center my-3">Guessing Game</h1>
-                <h3 className="text-center my-3">Choose a number between 1-5000</h3>
+                <h3 className="text-center my-3">Choose a number between 1 - 10,000</h3>
                 <form onSubmit={ this.handleSubmit }>
                     <div className="row justify-content-center">
                         <div className="col-4">
@@ -151,12 +150,13 @@ class Game extends Component {
                         </div>
                     </div>
                     <div className="row justify-content-center">
-                        <button onClick={ this.onShake } className="btn btn-lg btn-outline-success col-xs-6 m-3">Guess Number</button>
+                        <button onClick={ this.handleShake } className="btn btn-lg btn-outline-success col-xs-6 m-3">Guess Number</button>
                         <button onClick={ this.resetGame } className="btn btn-lg btn-outline-danger col-xs-6 m-3" type="button">Reset Game</button>
                     </div>
                 </form>
-                <h1 className={"text-center my-3 " + ( shake ? 'shake' : '') }>{ guess } { message }</h1>
+                <h1 className={"text-center my-3 " + ( shake ? 'shake' : '') }>{ message }</h1>
                 <p className="text-center">Current Number of Guesses: { guessCount } | Lowest Score: { lowestScore.length ? Math.min(...lowestScore) : 0 } </p>
+                <div><History list={history}/></div>
             </div>
         )
     }
