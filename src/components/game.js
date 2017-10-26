@@ -7,18 +7,17 @@ class Game extends Component {
 
         this.state = {
             randomNum: 0,
-            guess: '',
             guessInput: '',
             guessCount: 0,
             score: 'Not Set',
             min: 1,
             max: 10000,
-            lowestScore: [],
             history: [],
             displayLow: false,
             displayCorrect: false,
             displayHigh: false,
-            displayNull: false
+            displayNull: false,
+            record: localStorage.getItem('lowScore') || 'Not Set',
         };
         this.generateRandomNum = this.generateRandomNum.bind(this);
         this.handleUserInput = this.handleUserInput.bind(this);
@@ -27,23 +26,6 @@ class Game extends Component {
         this.handleShake = this.handleShake.bind(this);
         this.handleGuess = this.handleGuess.bind(this);
         this.resetGame = this.resetGame.bind(this);
-    }
-
-    componentWillMount() {
-        const lowestScore = localStorage.lowestScore;
-
-        if(lowestScore){
-            this.setState({
-              lowestScore: JSON.parse(lowestScore)
-            })
-        }
-    }
-
-    componentDidUpdate() {
-        const { lowestScore } = this.state;
-        if (localStorage.lowestScore !== lowestScore){
-            localStorage.lowestScore = JSON.stringify(lowestScore);
-        }
     }
 
     componentDidMount() {
@@ -67,12 +49,8 @@ class Game extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { guessInput, guessCount } = this.state;
-        this.setState({
-            guess: parseInt(guessInput),
-            guessInput: '',
-            guessCount: guessCount + 1,
-        });
+        const { guessInput } = this.state;
+        this.setState({ guessInput: '' });
         this.handleGuess();
         console.log('This is the random number', this.state.randomNum);
     }
@@ -93,13 +71,13 @@ class Game extends Component {
     }
 
     handleGuess() {
-        const { lowestScore, guess, guessCount, guessInput, randomNum, history } = this.state;
+        const { guessInput, guessCount, randomNum, history, lowestScore } = this.state;
         const userGuess = parseInt(guessInput);
-        const newStateArray = lowestScore;
-        const updates = {};
+        const updates = {
+            guessCount: guessCount + 1
+        };
         
         if(userGuess !== randomNum){
-            newStateArray.push(guessCount);
             updates.message = (userGuess > randomNum) ? 'Too High' : 'Too Low';
             updates.displayHigh = (userGuess > randomNum) ? true : false;
             updates.displayLow = (userGuess < randomNum) ? true : false;
@@ -108,23 +86,30 @@ class Game extends Component {
             updates.message = 'You Guessed It!';
             updates.randomNum = this.generateRandomNum();
             updates.score = guessCount;
-            updates.guessCount = 0;
-            updates.lowestScore = newStateArray;
             updates.displayCorrect = true;
+            this.updateLowestScore(updates.guessCount);
+            updates.guessCount = 0;
         }
         if(isNaN(userGuess)){
             updates.message = 'Please enter a number';
-            updates.guess = '';
             updates.displayNull = false;
         }
         updates.history = [{guess: userGuess, result: updates.message}, ...history];
         this.setState(updates);
     }
 
+    updateLowestScore(score){
+        const record = localStorage.getItem('lowScore');
+
+        if(!record || record > score){
+            localStorage.setItem('lowScore', score);
+            this.setState({ record: score });
+        }
+    }
+
     resetGame() {
         this.setState ({
             randomNum: this.generateRandomNum(),
-            guess: '',
             guessInput: '',
             guessCount: 0,
             min: 1,
@@ -136,7 +121,7 @@ class Game extends Component {
     }
 
     render(){
-        const { displayHigh, displayLow, displayCorrect, guessInput, guess, guessCount, lowestScore, shake, message, history } = this.state;
+        const { displayHigh, displayLow, displayCorrect, guessInput, guessCount, shake, message, history, record } = this.state;
         return (
             <div className="gameArea">
                 <h1 className="text-center my-3">Guessing Game</h1>
@@ -144,8 +129,10 @@ class Game extends Component {
                 <form onSubmit={ this.handleSubmit }>
                     <div className="row justify-content-center">
                         <div className="col-4">
-                            <input value={ guessInput } onChange={ this.handleUserInput } onClick={ this.handleDisplay }  className={"form-control form-control-lg user-input mt-3 " +
-                            (displayLow ? 'displayLow' : displayHigh ? 'displayHigh' : displayCorrect ? 'displayCorrect' : '')}
+                            <input value={ guessInput } onChange={ this.handleUserInput } onClick={ this.handleDisplay }  
+                                className={"form-control form-control-lg user-input mt-3 " +
+                                    (displayLow ? 'displayLow' : displayHigh ? 'displayHigh' : displayCorrect ? 'displayCorrect' : ''
+                                )}
                             />
                         </div>
                     </div>
@@ -155,7 +142,7 @@ class Game extends Component {
                     </div>
                 </form>
                 <h1 className={"text-center my-3 " + ( shake ? 'shake' : '') }>{ message }</h1>
-                <p className="text-center">Current Number of Guesses: { guessCount } | Lowest Score: { lowestScore.length ? Math.min(...lowestScore) : 0 } </p>
+                <p className="text-center">Current Number of Guesses: { guessCount } | Lowest Score: { record } </p>
                 <div><History list={history}/></div>
             </div>
         )
