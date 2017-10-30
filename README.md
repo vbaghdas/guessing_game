@@ -4,7 +4,7 @@
 
 #### Description
 
-The goal of this project was to get our first introduction to using a React framework proceeding a previous project developed in plain JS that allows a user to guess a randomly generated number between 1 and 10,000. This project provided great experience in updating and saving state in React. Your lowest score is saved in local storage and displayed in the app.
+The goal of this project was to get our first introduction to using a React framework proceeding a previous project developed in plain JS that allows a user to guess a randomly generated number between 1 and 10,000. This project provided great experience in updating and saving state in React. Your lowest score is also saved in local storage and displayed in the app if you ever decide to close it.
 
 ### Setup Instructions
 
