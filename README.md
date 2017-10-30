@@ -18,6 +18,3 @@ The goal of this project was to get our first introduction to using a React fram
 > 5. Start dev server
 >    - `npm start`
 > 6. Open a browser and navigate to `localhost:3000`
-
-##### DEMO IMAGE: 
-![alt text](http://dev.vachebaghdassarian.com/images/portfolio/guessing.png "Guessing Game")
