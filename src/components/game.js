@@ -129,7 +129,7 @@ class Game extends Component {
                 <form onSubmit={ this.handleSubmit }>
                     <div className="row justify-content-center">
                         <div className="col-4">
-                            <input value={ guessInput } onChange={ this.handleUserInput } onClick={ this.handleDisplay }  
+                            <input type="number" value={ guessInput } onChange={ this.handleUserInput } onClick={ this.handleDisplay }  
                                 className={"form-control form-control-lg user-input mt-3 " +
                                     (displayLow ? 'displayLow' : displayHigh ? 'displayHigh' : displayCorrect ? 'displayCorrect' : ''
                                 )}

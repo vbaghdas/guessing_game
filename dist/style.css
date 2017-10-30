@@ -1,0 +1,6 @@
+body {
+    background: url(bgimage.jpg) no-repeat fixed center;
+}  
+.container {
+    padding-top: 50px;
+}

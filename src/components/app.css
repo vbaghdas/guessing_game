@@ -1,6 +1,6 @@
 /* Game Area */
 .gameArea {
-    background: linear-gradient(360deg, #000, #333);
+    background: rgba(34,34,34,0.8);
     background-size: 100%;
     padding: 15px;
     border-top-right-radius: .25rem;
@@ -43,17 +43,16 @@
     background: #fff;
 }
 
-
 /* History */
 .list-group-item-info {
-    background-color: #222;
+    background: rgba(34,34,34,0.8);
     border: solid #111 2px;
 }
 .list-group-item-danger {
-    background-color: #222;
+    background: rgba(34,34,34,0.8);
     border: solid #111 2px;
 }
 .list-group-item-success {
-    background-color: #222;
+    background: rgba(34,34,34,0.8);
     border: solid #111 2px;
 }
