@@ -90,10 +90,6 @@ class Game extends Component {
             this.updateLowestScore(updates.guessCount);
             updates.guessCount = 0;
         }
-        if(isNaN(userGuess)){
-            updates.message = 'Please enter a number';
-            updates.displayNull = false;
-        }
         updates.history = [{guess: userGuess, result: updates.message}, ...history];
         this.setState(updates);
     }
@@ -137,8 +133,18 @@ class Game extends Component {
                         </div>
                     </div>
                     <div className="row justify-content-center">
-                        <button onClick={ this.handleShake } className="btn btn-lg btn-outline-success col-xs-6 m-3">Guess Number</button>
-                        <button onClick={ this.resetGame } className="btn btn-lg btn-outline-danger col-xs-6 m-3" type="button">Reset Game</button>
+                        <button
+                            disabled={!guessInput}
+                            onClick={ this.handleShake } 
+                            className="btn btn-lg btn-outline-success col-xs-6 m-3">
+                            Guess Number
+                        </button>
+                        <button 
+                            onClick={ this.resetGame } 
+                            className="btn btn-lg btn-outline-danger col-xs-6 m-3" 
+                            type="button">
+                            Reset Game
+                        </button>
                     </div>
                 </form>
                 <h1 className={"text-center my-3 " + ( shake ? 'shake' : '') }>{ message }</h1>
