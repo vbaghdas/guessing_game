@@ -1,6 +1,6 @@
 # Guessing Game
 
-## Technologies: React.js, Redux, JavaScript, HTML5, CSS3
+## Technologies: React.js, JavaScript, HTML5, CSS3, Bootstrap
 
 #### Description
 
